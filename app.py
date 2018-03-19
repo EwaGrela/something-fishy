@@ -164,6 +164,7 @@ def patch_single_fish(id):
 		session['fishes'][idx][i] = data[i]
 	return "ok"
 
+app.secret_key = "fsgagfsfs78qgf784ewgfcdsf"
 
 if __name__ == '__main__':
 	app.run(debug=True, threaded=False)
