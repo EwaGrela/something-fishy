@@ -83,7 +83,7 @@ def fishy():
 
 def get_fish():
 	global fishes
-	fish = json.dumps(fishes, sort_keys=True)
+	fish = json.dumps(fishes, sort_keys=True, indent=4)
 	return fish
 
 def post_fish():
@@ -116,7 +116,7 @@ def single_fish(id):
 def get_single_fish(id):
 	idx = "id_"+ str(id)
 	global fishes
-	single_fish = json.dumps(fishes.get(idx))
+	single_fish = json.dumps(fishes.get(idx), indent=4)
 	return single_fish
 
 def put_single_fish(id):
@@ -136,6 +136,8 @@ def put_single_fish(id):
 def delete_single_fish(id):
 	idx = "id_"+ str(id)
 	global fishes
+	print("FISHES: '{}'".format(fishes))
+	print("IDX: {}".format(idx))
 	del fishes[idx]
 	return "ok"
 
