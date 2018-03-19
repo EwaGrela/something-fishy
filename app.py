@@ -9,7 +9,7 @@ user = {
 	"pass":"J3si07r"
 }
 
-fishes = {
+app.config['fishes'] = {
     "id_1": {
         "who": "Znajomy",
         "where": {
@@ -82,8 +82,9 @@ def fishy():
 		return post_fish()
 
 def get_fish():
-	global fishes
-	fish = json.dumps(fishes, sort_keys=True, indent=4)
+#	global fishes
+#	fish = json.dumps(fishes, sort_keys=True, indent=4)
+	fish = json.dumps(app.config['fishes'], indent=4)
 	return fish
 
 def post_fish():
@@ -95,9 +96,12 @@ def post_fish():
  		"length": data.get("length"),
  		"kind": data.get("kind")
     }
-	global fishes
-	index = "id_" + str(len(fishes)+1)
-	fishes[index] = new_fish
+#	global fishes
+#	index = "id_" + str(len(fishes)+1)
+#	fishes[index] = new_fish
+	index = "id_" + str(len(app.config['fishes'])+1)
+
+	app.config['fishes'][index] = new_fish
 	return "OK"
     
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
