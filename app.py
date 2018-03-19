@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, make_response, redirect
+from flask import Flask, render_template, request, Response, make_response, redirect, session
 import json
 from functools import wraps
 
@@ -52,9 +52,11 @@ def home():
 @app.route("/login", methods=["POST"])
 def login():
 	if request.authorization and request.authorization.username ==user["login"] and request.authorization.password ==user["pass"]:
-		login_cookie = request.cookies.get('login_cookie')
+		#login_cookie = request.cookies.get('login_cookie')
+		session['username'] = request.authorization.username
+		session['fishes'] = app.config['fishes']
 		resp = redirect('hello')
-		resp.set_cookie("login_cookie", "login cookie")
+		#resp.set_cookie("login_cookie", "login cookie")
 		return resp
 	return make_response('not verified!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
@@ -70,7 +72,8 @@ def hello():
 @auth_required
 def logout():
 	resp = make_response("logged out", 200 )
-	resp.set_cookie("login_cookie", "", expires=0)
+	#resp.set_cookie("login_cookie", "", expires=0)
+	session.pop('username', None)
 	return resp
 
 @app.route("/fishes", methods=["GET", "POST"])
@@ -84,7 +87,7 @@ def fishy():
 def get_fish():
 #	global fishes
 #	fish = json.dumps(fishes, sort_keys=True, indent=4)
-	fish = json.dumps(app.config['fishes'], indent=4)
+	fish = json.dumps(session['fishes'], indent=4)
 	return fish
 
 def post_fish():
@@ -99,16 +102,16 @@ def post_fish():
 #	global fishes
 #	index = "id_" + str(len(fishes)+1)
 #	fishes[index] = new_fish
-	index = "id_" + str(len(app.config['fishes'])+1)
+	index = "id_" + str(len(session['fishes'])+1)
 
-	app.config['fishes'][index] = new_fish
+	session['fishes'][index] = new_fish
 	return "OK"
     
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
 @auth_required
 def single_fish(id):
 	print("ACCESS SINGLE FISH")
-	print("FISHES: '{}'".format(app.config['fishes']))
+	print("FISHES: '{}'".format(session['fishes']))
 	if request.method=="GET":
 		return get_single_fish(id)
 	elif request.method =="PUT":
@@ -122,9 +125,9 @@ def single_fish(id):
 def get_single_fish(id):
 	idx = "id_"+ str(id)
 	# global fishes
-	print("FISHES: '{}'".format(app.config['fishes']))
+	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
-	single_fish = json.dumps(app.config['fishes'].get(idx), indent=4)
+	single_fish = json.dumps(session['fishes'].get(idx), indent=4)
 	return single_fish
 
 def put_single_fish(id):
@@ -138,17 +141,17 @@ def put_single_fish(id):
  		"kind": data.get("kind")
     }
 	# global fishes
-	print("FISHES: '{}'".format(app.config['fishes']))
+	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
-	app.config['fishes'][idx] = new_fish
+	session['fishes'][idx] = new_fish
 	return "ok"
 	
 def delete_single_fish(id):
 	idx = "id_"+ str(id)
 	# global fishes
-	print("FISHES: '{}'".format(app.config['fishes']))
+	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
-	del app.config['fishes'][idx]
+	del session['fishes'][idx]
 	return "ok"
 
 
@@ -158,7 +161,7 @@ def patch_single_fish(id):
 	# global fishes
 	print(list(data.keys()))
 	for i in list(data.keys()):
-		app.config['fishes'][idx][i] = data[i]
+		session['fishes'][idx][i] = data[i]
 	return "ok"
 
 
