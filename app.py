@@ -105,6 +105,7 @@ def post_fish():
 	index = "id_" + str(len(session['fishes'])+1)
 
 	session['fishes'][index] = new_fish
+	print("AFTER ADD FISHES: '{}'".format(session['fishes']))
 	return "OK"
     
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
