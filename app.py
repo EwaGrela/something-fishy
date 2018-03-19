@@ -108,7 +108,7 @@ def post_fish():
 @auth_required
 def single_fish(id):
 	print("ACCESS SINGLE FISH")
-	print("FISHES: '{}'".format(fishes))
+	print("FISHES: '{}'".format(app.config['fishes']))
 	if request.method=="GET":
 		return get_single_fish(id)
 	elif request.method =="PUT":
@@ -121,10 +121,10 @@ def single_fish(id):
 
 def get_single_fish(id):
 	idx = "id_"+ str(id)
-	global fishes
-	print("FISHES: '{}'".format(fishes))
+	# global fishes
+	print("FISHES: '{}'".format(app.config['fishes']))
 	print("IDX: {}".format(idx))
-	single_fish = json.dumps(fishes.get(idx), indent=4)
+	single_fish = json.dumps(app.config['fishes'].get(idx), indent=4)
 	return single_fish
 
 def put_single_fish(id):
@@ -137,28 +137,28 @@ def put_single_fish(id):
  		"length": data.get("length"),
  		"kind": data.get("kind")
     }
-	global fishes
-	print("FISHES: '{}'".format(fishes))
+	# global fishes
+	print("FISHES: '{}'".format(app.config['fishes']))
 	print("IDX: {}".format(idx))
-	fishes[idx] = new_fish
+	app.config['fishes'][idx] = new_fish
 	return "ok"
 	
 def delete_single_fish(id):
 	idx = "id_"+ str(id)
-	global fishes
-	print("FISHES: '{}'".format(fishes))
+	# global fishes
+	print("FISHES: '{}'".format(app.config['fishes']))
 	print("IDX: {}".format(idx))
-	del fishes[idx]
+	del app.config['fishes'][idx]
 	return "ok"
 
 
 def patch_single_fish(id):
 	idx = "id_"+ str(id)
 	data = request.get_json()
-	global fishes
+	# global fishes
 	print(list(data.keys()))
 	for i in list(data.keys()):
-		fishes[idx][i] = data[i]
+		app.config['fishes'][idx][i] = data[i]
 	return "ok"
 
 
