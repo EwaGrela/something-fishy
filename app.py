@@ -105,6 +105,7 @@ def post_fish():
 	index = "id_" + str(len(session['fishes'])+1)
 
 	session['fishes'][index] = new_fish
+	session.modified = True
 	print("AFTER ADD FISHES: '{}'".format(session['fishes']))
 	return "OK"
     
@@ -145,6 +146,7 @@ def put_single_fish(id):
 	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
 	session['fishes'][idx] = new_fish
+	session.modified = True
 	return "ok"
 	
 def delete_single_fish(id):
@@ -153,6 +155,7 @@ def delete_single_fish(id):
 	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
 	del session['fishes'][idx]
+	session.modified = True
 	return "ok"
 
 
@@ -163,6 +166,7 @@ def patch_single_fish(id):
 	print(list(data.keys()))
 	for i in list(data.keys()):
 		session['fishes'][idx][i] = data[i]
+		session.modified = True
 	return "ok"
 
 app.secret_key = "fsgagfsfs78qgf784ewgfcdsf"
