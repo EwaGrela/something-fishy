@@ -103,6 +103,8 @@ def post_fish():
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
 @auth_required
 def single_fish(id):
+	print("ACCESS SINGLE FISH")
+	print("FISHES: '{}'".format(fishes))
 	if request.method=="GET":
 		return get_single_fish(id)
 	elif request.method =="PUT":
@@ -116,6 +118,8 @@ def single_fish(id):
 def get_single_fish(id):
 	idx = "id_"+ str(id)
 	global fishes
+	print("FISHES: '{}'".format(fishes))
+	print("IDX: {}".format(idx))
 	single_fish = json.dumps(fishes.get(idx), indent=4)
 	return single_fish
 
@@ -130,6 +134,8 @@ def put_single_fish(id):
  		"kind": data.get("kind")
     }
 	global fishes
+	print("FISHES: '{}'".format(fishes))
+	print("IDX: {}".format(idx))
 	fishes[idx] = new_fish
 	return "ok"
 	
