@@ -50,11 +50,9 @@ def home():
 @app.route("/login", methods=["POST"])
 def login():
 	if request.authorization and request.authorization.username ==user["login"] and request.authorization.password ==user["pass"]:
-		#login_cookie = request.cookies.get('login_cookie')
 		session['username'] = request.authorization.username
 		session['fishes'] = app.config['fishes']
 		resp = redirect('hello')
-		#resp.set_cookie("login_cookie", "login cookie")
 		return resp
 	return make_response('not verified!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
@@ -70,7 +68,6 @@ def hello():
 @auth_required
 def logout():
 	resp = make_response("logged out", 200 )
-	#resp.set_cookie("login_cookie", "", expires=0)
 	session.pop('username', None)
 	session.pop('fishes', None)
 	return resp
@@ -101,7 +98,10 @@ def post_fish():
 #	global fishes
 #	index = "id_" + str(len(fishes)+1)
 #	fishes[index] = new_fish
+	for i in range(len(session['fishes'])+1):
+		print(i)
 	index = "id_" + str(len(session['fishes'])+1)
+	# index = input("enter id")
 
 	session['fishes'][index] = new_fish
 	session.modified = True
@@ -124,7 +124,7 @@ def single_fish(id):
 
 
 def get_single_fish(id):
-	idx = "id_"+ str(id)
+	idx = str(id)
 	# global fishes
 	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
@@ -132,7 +132,8 @@ def get_single_fish(id):
 	return single_fish
 
 def put_single_fish(id):
-	idx = "id_"+ str(id)
+	# idx = "id_"+ str(id)
+	idx = str(id)
 	data = request.get_json()
 	new_fish = {
  		"who": data.get("who"),
@@ -149,7 +150,8 @@ def put_single_fish(id):
 	return "ok"
 	
 def delete_single_fish(id):
-	idx = "id_"+ str(id)
+	# idx = "id_"+ str(id)
+	idx = str(id)
 	# global fishes
 	print("FISHES: '{}'".format(session['fishes']))
 	print("IDX: {}".format(idx))
@@ -159,10 +161,10 @@ def delete_single_fish(id):
 
 
 def patch_single_fish(id):
-	idx = "id_"+ str(id)
+	# idx = "id_"+ str(id)
+	idx = str(id)
 	data = request.get_json()
 	# global fishes
-	print(list(data.keys()))
 	for i in list(data.keys()):
 		session['fishes'][idx][i] = data[i]
 		session.modified = True
