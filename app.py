@@ -40,9 +40,6 @@ def auth_required(f):
         return f(*args, **kwargs)
     return decorated
 
-
-
-
 @app.route("/")
 def home():
 	return "sum fanatics vs szczupak hooligans"
@@ -81,8 +78,9 @@ def fishy():
 		return post_fish()
 
 def get_fish():
-	fish = json.dumps(session['fishes'], indent=4)
-	return fish
+	kinds = ",".join(sorted([i.get("kind") for i in session["fishes"].values()], key=lambda s: s.lower()))
+	kinds = json.dumps(kinds, indent=4)
+	return kinds
 
 def post_fish():
 	data = request.get_json()
