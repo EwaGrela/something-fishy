@@ -35,7 +35,7 @@ app.config['fishes'] = {
 def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        if not session['username']:
+        if not session.get('username'):
             return "please authenticate"
         return f(*args, **kwargs)
     return decorated
