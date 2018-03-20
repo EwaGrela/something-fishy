@@ -81,8 +81,6 @@ def fishy():
 		return post_fish()
 
 def get_fish():
-#	global fishes
-#	fish = json.dumps(fishes, sort_keys=True, indent=4)
 	fish = json.dumps(session['fishes'], indent=4)
 	return fish
 
@@ -95,24 +93,15 @@ def post_fish():
  		"length": data.get("length"),
  		"kind": data.get("kind")
     }
-#	global fishes
-#	index = "id_" + str(len(fishes)+1)
-#	fishes[index] = new_fish
-	for i in range(len(session['fishes'])+1):
-		print(i)
-	index = "id_" + str(len(session['fishes'])+1)
-	# index = input("enter id")
-
+	keys = [int(key.split("_")[1]) for key in sorted(session['fishes'].keys())]
+	index = "id_" + str((keys[-1]+1))
 	session['fishes'][index] = new_fish
 	session.modified = True
-	print("AFTER ADD FISHES: '{}'".format(session['fishes']))
 	return "OK"
     
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
 @auth_required
 def single_fish(id):
-	print("ACCESS SINGLE FISH")
-	print("FISHES: '{}'".format(session['fishes']))
 	if request.method=="GET":
 		return get_single_fish(id)
 	elif request.method =="PUT":
@@ -125,14 +114,10 @@ def single_fish(id):
 
 def get_single_fish(id):
 	idx = str(id)
-	# global fishes
-	print("FISHES: '{}'".format(session['fishes']))
-	print("IDX: {}".format(idx))
 	single_fish = json.dumps(session['fishes'].get(idx), indent=4)
 	return single_fish
 
 def put_single_fish(id):
-	# idx = "id_"+ str(id)
 	idx = str(id)
 	data = request.get_json()
 	new_fish = {
@@ -142,33 +127,24 @@ def put_single_fish(id):
  		"length": data.get("length"),
  		"kind": data.get("kind")
     }
-	# global fishes
-	print("FISHES: '{}'".format(session['fishes']))
-	print("IDX: {}".format(idx))
 	session['fishes'][idx] = new_fish
 	session.modified = True
-	return "ok"
+	return "OK"
 	
 def delete_single_fish(id):
-	# idx = "id_"+ str(id)
 	idx = str(id)
-	# global fishes
-	print("FISHES: '{}'".format(session['fishes']))
-	print("IDX: {}".format(idx))
 	del session['fishes'][idx]
 	session.modified = True
-	return "ok"
+	return "OK"
 
 
 def patch_single_fish(id):
-	# idx = "id_"+ str(id)
 	idx = str(id)
 	data = request.get_json()
-	# global fishes
 	for i in list(data.keys()):
 		session['fishes'][idx][i] = data[i]
 		session.modified = True
-	return "ok"
+	return "OK"
 
 app.secret_key = "fsgagfsfs78qgf784ewgfcdsf"
 
