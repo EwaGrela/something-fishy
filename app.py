@@ -79,6 +79,7 @@ def fishy():
 
 def get_fish():
 	# kinds = ",".join(sorted([i.get("kind") for i in session["fishes"].values()], key=lambda s: s.lower()))
+	print("kinds")
 	kinds = ",".join([i.get("kind") for i in session["fishes"].values()])
 	kinds = json.dumps(kinds, indent=4)
 	return kinds
