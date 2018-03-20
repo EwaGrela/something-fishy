@@ -74,6 +74,7 @@ def logout():
 	resp = make_response("logged out", 200 )
 	#resp.set_cookie("login_cookie", "", expires=0)
 	session.pop('username', None)
+	session.pop('fishes', None)
 	return resp
 
 @app.route("/fishes", methods=["GET", "POST"])
