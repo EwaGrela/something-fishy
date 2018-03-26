@@ -79,9 +79,12 @@ def fishy():
 
 def get_fish():
 	# kinds = ",".join(sorted([i.get("kind") for i in session["fishes"].values()], key=lambda s: s.lower()))
+	fishes = json.dumps(session["fishes"], indent=4)
 	kinds = ",".join([i.get("kind") for i in session["fishes"].values()])
 	kinds = json.dumps(kinds, indent=4)
-	return kinds
+	# return kinds
+	return fishes
+
 
 def post_fish():
 	data = request.get_json()
@@ -96,7 +99,8 @@ def post_fish():
 	index = "id_" + str((keys[-1]+1))
 	session['fishes'][index] = new_fish
 	session.modified = True
-	return "OK"
+	# return "OK"
+	return json.dumps(new_fish)
     
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
 @auth_required
