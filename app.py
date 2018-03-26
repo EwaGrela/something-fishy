@@ -53,6 +53,7 @@ def login():
 		return resp
 	return make_response('not verified!', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
 
+
 @app.route("/hello")
 @auth_required
 def hello():
@@ -78,11 +79,7 @@ def fishy():
 		return post_fish()
 
 def get_fish():
-	# kinds = ",".join(sorted([i.get("kind") for i in session["fishes"].values()], key=lambda s: s.lower()))
 	fishes = json.dumps(session["fishes"], indent=4)
-	kinds = ",".join([i.get("kind") for i in session["fishes"].values()])
-	kinds = json.dumps(kinds, indent=4)
-	# return kinds
 	return fishes
 
 
