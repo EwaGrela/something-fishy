@@ -64,7 +64,7 @@ def hello():
 @app.route("/logout", methods=["POST"])
 @auth_required
 def logout():
-	resp = make_response("logged out", 200 )
+	resp = redirect("/")
 	session.pop('username', None)
 	session.pop('fishes', None)
 	return resp
