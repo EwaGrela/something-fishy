@@ -36,7 +36,7 @@ def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if not session.get('username'):
-            return "please authenticate"
+            return redirect("login")
         return f(*args, **kwargs)
     return decorated
 
