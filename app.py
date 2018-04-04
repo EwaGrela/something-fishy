@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response, make_response, redirect, session
+from flask import Flask, render_template, request, Response, make_response, redirect, session, jsonify
 import json
 from functools import wraps
 
@@ -79,8 +79,8 @@ def fishy():
 		return post_fish()
 
 def get_fish():
-	fishes = json.dumps(session["fishes"], indent=4)
-	return fishes
+	fishes = session["fishes"]
+	return jsonify(fishes)
 
 
 def post_fish():
@@ -97,7 +97,7 @@ def post_fish():
 	session['fishes'][index] = new_fish
 	session.modified = True
 	# return "OK"
-	return json.dumps(new_fish)
+	return jsonify(new_fish)
     
 @app.route("/fishes/<id>", methods=["GET", "PATCH", "PUT", "DELETE"])
 @auth_required
@@ -114,8 +114,8 @@ def single_fish(id):
 
 def get_single_fish(id):
 	idx = str(id)
-	single_fish = json.dumps(session['fishes'].get(idx), indent=4)
-	return single_fish
+	single_fish = session['fishes'].get(idx)
+	return jsonify(single_fish)
 
 def put_single_fish(id):
 	idx = str(id)
